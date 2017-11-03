@@ -81,7 +81,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent
 	InputComponent->BindAction("RotateCamera", EInputEvent::IE_Released, this, &APlayerCharacter::RotateReleased);
 
 	InputComponent->BindAction("FastMove", EInputEvent::IE_Pressed, this, &APlayerCharacter::FastMovePressed);
-	InputComponent->BindAction("FastMove", EInputEvent::IE_Pressed, this, &APlayerCharacter::FastMoveReleased);
+	InputComponent->BindAction("FastMove", EInputEvent::IE_Released, this, &APlayerCharacter::FastMoveReleased);
 }
 
 void APlayerCharacter::ForwardAxis(float axis)
