@@ -1,0 +1,24 @@
+
+# Substance generated meta files.
+.alg_meta/
+
+# Any exported files should go here (FBXs, pngs etc. that you want to bring into UE4.)
+_exports/
+
+# Visual Studio
+.vs/
+
+# Visual Studio Code
+.vscode/
+
+# MacOS meta files
+.DS_Store
+
+# Sometimes dropped by photoshop
+*.tmp
+
+# I just exported these here in a hurry, they're not strictly necessary since they come from the blend files.
+*.fbx
+
+# It's wayyy to large (500MB already!)
+[Mm]aterials/

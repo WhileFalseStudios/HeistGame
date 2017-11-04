@@ -1,6 +1,7 @@
 // Copyright (c) While False Studios 2017.
 
 #include "HeistCharacter.h"
+#include "AIController.h"
 
 
 // Sets default values
@@ -28,4 +29,17 @@ void AHeistCharacter::Tick(float DeltaTime)
 void AHeistCharacter::Death_Implementation(AActor* killer, float killingDamage, const UDamageType* killingDamageType, const FVector& damageOrigin, const FVector& damageForce)
 {
 
+}
+
+FGenericTeamId AHeistCharacter::GetGenericTeamId() const
+{
+	AAIController* aiController = Cast<AAIController>(GetController());
+	if (IsValid(aiController))
+	{
+		return aiController->GetGenericTeamId();
+	}
+	else
+	{
+		return FGenericTeamId::NoTeam;
+	}
 }

@@ -47,6 +47,8 @@ public:
 
 protected:
 
+	virtual FGenericTeamId GetGenericTeamId() const override;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
 	float NormalMoveSpeed = 300;
 

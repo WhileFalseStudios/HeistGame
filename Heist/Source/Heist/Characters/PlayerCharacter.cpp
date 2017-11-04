@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "Kismet/KismetMathLibrary.h"
+#include "HeistTeamInfo.h"
 
 APlayerCharacter::APlayerCharacter() : Super()
 {	
@@ -146,4 +147,9 @@ void APlayerCharacter::FastMovePressed()
 
 void APlayerCharacter::FastMoveReleased()
 {
+}
+
+FGenericTeamId APlayerCharacter::GetGenericTeamId() const
+{
+	return FGenericTeamId(HEIST_TEAM_PLAYER);
 }

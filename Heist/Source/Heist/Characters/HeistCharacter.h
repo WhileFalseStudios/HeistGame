@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GenericTeamAgentInterface.h"
 #include "HeistCharacter.generated.h"
 
 UCLASS()
-class HEIST_API AHeistCharacter : public ACharacter
+class HEIST_API AHeistCharacter : public ACharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -24,6 +25,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	virtual FGenericTeamId GetGenericTeamId() const override;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Health")
 	int32 Health;
