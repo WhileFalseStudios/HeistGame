@@ -32,6 +32,16 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Perception")
 	class UAISenseConfig_Sight* SightConfig;
 
+	UPROPERTY(BlueprintReadOnly, Category = "AI|Network")
+	bool bPawnIsDisabled;
+
+	UPROPERTY(BlueprintReadOnly, Category = "AI|Health")
+	bool bPawnIsDestroyed;
+
+	void DisablePerception();
+
+	void EnablePerception();
+
 protected:
 	virtual void OnConstruction(const FTransform& transform) override;
 };

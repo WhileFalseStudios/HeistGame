@@ -6,3 +6,4 @@
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, Heist, "Heist" );
 
 DEFINE_LOG_CATEGORY(LogEnemy);
+DEFINE_LOG_CATEGORY(LogHeistNetworks);

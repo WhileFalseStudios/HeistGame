@@ -36,6 +36,18 @@ void ADefenceAIController::JoinSovietsTeam()
 void ADefenceAIController::PawnKilled()
 {
 	SetGenericTeamId(HEIST_TEAM_SOVIETS_UNCONSCIOUS);
+	bPawnIsDisabled = true;
+	bPawnIsDestroyed = true;
+}
+
+void ADefenceAIController::DisablePerception()
+{
+	PerceptionComponent->SetActive(false);
+}
+
+void ADefenceAIController::EnablePerception()
+{
+	PerceptionComponent->SetActive(true);
 }
 
 void ADefenceAIController::OnConstruction(const FTransform& transform)

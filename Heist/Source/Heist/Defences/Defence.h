@@ -21,9 +21,23 @@ public:
 	// Sets default values for this pawn's properties
 	ADefence();	
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Networks")
+	class UNetworkConnectedComponent* NetworkComponent;
+
+	UFUNCTION(BlueprintPure, Category = "Networks")
+	bool GetEnabledOverNetwork();
+
+	UFUNCTION()
+	void OnNetworkEnabled();
+
+	UFUNCTION()
+	void OnNetworkDisabled();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;	
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Health")
 	int32 Health;
@@ -41,7 +55,12 @@ protected:
 	float PeripheralVisionAngle = 90.0f;
 
 	UFUNCTION(BlueprintNativeEvent, Category = "Health")
-	void Destroyed(AActor* killer, float killingDamage, const UDamageType* killingDamageType, const FVector& damageOrigin, const FVector& damageForce);
+	void Killed(AActor* killer, float killingDamage, TSubclassOf<UDamageType> killingDamageType, const FVector& damageOrigin, const FVector& damageForce);
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) override;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Health")
+	bool bIsDestroyed;	
 
 public:	
 	// Called every frame
