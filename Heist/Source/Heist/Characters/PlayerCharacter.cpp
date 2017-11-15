@@ -83,6 +83,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent
 
 	InputComponent->BindAction("FastMove", EInputEvent::IE_Pressed, this, &APlayerCharacter::FastMovePressed);
 	InputComponent->BindAction("FastMove", EInputEvent::IE_Released, this, &APlayerCharacter::FastMoveReleased);
+
+	InputComponent->BindAction("ActionMode1", EInputEvent::IE_Pressed, this, &APlayerCharacter::ActionMode1Pressed);
+	InputComponent->BindAction("ActionMode2", EInputEvent::IE_Pressed, this, &APlayerCharacter::ActionMode2Pressed);
+	InputComponent->BindAction("ActionMode3", EInputEvent::IE_Pressed, this, &APlayerCharacter::ActionMode3Pressed);
+	InputComponent->BindAction("ActionModeCycle", EInputEvent::IE_Pressed, this, &APlayerCharacter::ActionModeTogglePressed);
 }
 
 void APlayerCharacter::ForwardAxis(float axis)
@@ -117,6 +122,18 @@ void APlayerCharacter::RightAxis(float axis)
 
 void APlayerCharacter::AttackPressed()
 {
+	switch (ActionMode)
+	{
+	case EActionMode::Interact:
+		Action_Interact();
+		break;
+	case EActionMode::LethalAttack:
+		Action_LethalAttack();
+		break;
+	case EActionMode::StealthAttack:
+		Action_StealthAttack();
+		break;
+	}
 }
 
 void APlayerCharacter::AttackReleased()
@@ -147,6 +164,39 @@ void APlayerCharacter::FastMovePressed()
 
 void APlayerCharacter::FastMoveReleased()
 {
+}
+
+void APlayerCharacter::ActionMode1Pressed()
+{
+	ActionMode = EActionMode::Interact;
+	ActionModeChanged(EActionMode::Interact);
+}
+
+void APlayerCharacter::ActionMode2Pressed()
+{
+	ActionMode = EActionMode::StealthAttack;
+	ActionModeChanged(EActionMode::StealthAttack);
+}
+
+void APlayerCharacter::ActionMode3Pressed()
+{
+	ActionMode = EActionMode::LethalAttack;
+	ActionModeChanged(EActionMode::LethalAttack);
+}
+
+void APlayerCharacter::ActionModeTogglePressed()
+{
+	uint8 nextValue = (uint8)ActionMode + 1;
+	if (nextValue == (uint8)EActionMode::MAX)
+	{
+		ActionMode = (EActionMode)0; //Wrap back to the first thing in the enum.
+	}
+	else
+	{
+		ActionMode = (EActionMode)nextValue; //Go to the next one.
+	}
+
+	ActionModeChanged(ActionMode);
 }
 
 FGenericTeamId APlayerCharacter::GetGenericTeamId() const

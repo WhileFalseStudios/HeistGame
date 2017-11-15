@@ -24,8 +24,11 @@ ANetwork::ANetwork()
 	static FConstructorStatics ConstructorStatics;
 
 	BillboardComponent = CreateEditorOnlyDefaultSubobject<UBillboardComponent>(TEXT("Billboard"), true);
-	BillboardComponent->Sprite = ConstructorStatics.Sprite.Object;
-	BillboardComponent->bIsScreenSizeScaled = true;
+	if (IsValid(BillboardComponent))
+	{
+		BillboardComponent->Sprite = ConstructorStatics.Sprite.Object;
+		BillboardComponent->bIsScreenSizeScaled = true;
+	}
 
 #endif
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Characters/HeistCharacter.h"
+#include "Characters/ActionMode.h"
 #include "PlayerCharacter.generated.h"
 
 /**
@@ -27,6 +28,11 @@ private:
 	void FastMovePressed();
 	void FastMoveReleased();
 
+	void ActionMode1Pressed();
+	void ActionMode2Pressed();
+	void ActionMode3Pressed();
+	void ActionModeTogglePressed();	
+
 	void CameraUpdate();
 	void UpdatePlayerRotation(float deltaTime);
 
@@ -47,7 +53,20 @@ public:
 
 protected:
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
+	void Action_Interact();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
+	void Action_StealthAttack();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
+	void Action_LethalAttack();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
+	void ActionModeChanged(EActionMode newMode);
+
 	virtual FGenericTeamId GetGenericTeamId() const override;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Interaction")
+	EActionMode ActionMode;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
 	float NormalMoveSpeed = 300;

@@ -8,14 +8,17 @@
 AHeistCharacter::AHeistCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
+	PrimaryActorTick.bCanEverTick = true;	
 }
 
 // Called when the game starts or when spawned
 void AHeistCharacter::BeginPlay()
 {
-	Super::BeginPlay();
+	Super::BeginPlay();		
+}
+
+void AHeistCharacter::SetupHealth()
+{
 	Health = MaxHealth;
 }
 
@@ -26,9 +29,25 @@ void AHeistCharacter::Tick(float DeltaTime)
 
 }
 
-void AHeistCharacter::Death_Implementation(AActor* killer, float killingDamage, const UDamageType* killingDamageType, const FVector& damageOrigin, const FVector& damageForce)
+float AHeistCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+	if (bIsDead)
+		return 0.0f;
+
+	Health = FMath::Clamp<int32>(Health - DamageAmount, 0, MaxHealth);
+	if (Health == 0)
+	{
+		Death(DamageCauser, DamageAmount, DamageEvent.DamageTypeClass, FVector(), FVector());
+	}
+
+	return DamageAmount;
+}
+
+void AHeistCharacter::Death_Implementation(AActor* killer, float killingDamage, TSubclassOf<UDamageType> killingDamageType, const FVector& damageOrigin, const FVector& damageForce)
+{
+	bIsDead = true;
 }
 
 FGenericTeamId AHeistCharacter::GetGenericTeamId() const

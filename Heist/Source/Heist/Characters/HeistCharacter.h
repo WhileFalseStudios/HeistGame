@@ -31,16 +31,21 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Health")
 	int32 Health;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Health")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Health")
 	int32 MaxHealth;
+
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	void SetupHealth();
 
 	UPROPERTY(BlueprintReadOnly, Category = "Health")
 	bool bIsDead;
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) override;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintNativeEvent, Category = "Health")
-	void Death(AActor* killer, float killingDamage, const UDamageType* killingDamageType, const FVector& damageOrigin, const FVector& damageForce);
+	void Death(AActor* killer, float killingDamage, TSubclassOf<UDamageType> killingDamageType, const FVector& damageOrigin, const FVector& damageForce);
 };
