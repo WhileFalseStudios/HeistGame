@@ -1,6 +1,7 @@
 // Copyright (c) While False Studios 2017.
 
 #include "HeistCharacter.h"
+#include "HeistCharacterAIController.h"
 #include "AIController.h"
 
 
@@ -42,12 +43,28 @@ float AHeistCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 		Death(DamageCauser, DamageAmount, DamageEvent.DamageTypeClass, FVector(), FVector());
 	}
 
+	AHeistCharacterAIController* controller = GetHeistController();
+	if (IsValid(controller))
+	{
+		controller->Notify_CharacterTakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	}
+
 	return DamageAmount;
 }
 
 void AHeistCharacter::Death_Implementation(AActor* killer, float killingDamage, TSubclassOf<UDamageType> killingDamageType, const FVector& damageOrigin, const FVector& damageForce)
 {
 	bIsDead = true;
+	AHeistCharacterAIController* controller = GetHeistController();
+	if (IsValid(controller))
+	{
+		controller->Notify_CharacterDeath(killer, killingDamage, killingDamageType, damageOrigin, damageForce);
+	}
+}
+
+AHeistCharacterAIController* AHeistCharacter::GetHeistController()
+{
+	return Cast<AHeistCharacterAIController>(GetController());
 }
 
 FGenericTeamId AHeistCharacter::GetGenericTeamId() const

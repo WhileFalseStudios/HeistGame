@@ -20,7 +20,12 @@ public:
 	int32 GetHealth() { return Health; }
 
 	UFUNCTION(BlueprintPure, Category = "Health")
+	int32 GetMaxHealth() { return MaxHealth; }
+
+	UFUNCTION(BlueprintPure, Category = "Health")
 	bool GetIsDead() { return bIsDead; }
+
+	class AHeistCharacterAIController* GetHeistController();
 
 protected:
 	// Called when the game starts or when spawned
