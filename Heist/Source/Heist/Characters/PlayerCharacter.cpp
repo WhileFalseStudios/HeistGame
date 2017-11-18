@@ -31,18 +31,18 @@ void APlayerCharacter::OnConstruction(const FTransform& transform)
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	CameraUpdate();
+	CameraUpdate(1.0f);
 	GetCharacterMovement()->MaxWalkSpeed = NormalMoveSpeed;
 }
 
 void APlayerCharacter::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
-	CameraUpdate();
+	CameraUpdate(deltaTime);
 	UpdatePlayerRotation(deltaTime);
 }
 
-void APlayerCharacter::CameraUpdate()
+void APlayerCharacter::CameraUpdate(float deltaTime)
 {
 	if (IsValid(GetController()))
 	{
@@ -50,7 +50,8 @@ void APlayerCharacter::CameraUpdate()
 		controllerRot.Pitch = -CameraPitch;
 		controllerRot.Roll = 0;
 		CameraSpringArm->SetWorldRotation(controllerRot);
-		CameraSpringArm->TargetArmLength = CameraNormalDistance;
+		float desiredCameraDistance = bIsDead ? CameraDeadDistance : CameraNormalDistance;
+		CameraSpringArm->TargetArmLength = FMath::FInterpTo(CameraSpringArm->TargetArmLength, desiredCameraDistance, deltaTime, CameraZoomSpeed);
 	}
 }
 
@@ -92,6 +93,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* InputComponent
 
 void APlayerCharacter::ForwardAxis(float axis)
 {
+	if (bIsDead)
+		return;
+
 	InputDirection.Y = axis;
 
 	FRotator rot = GetController()->GetControlRotation();
@@ -107,6 +111,9 @@ void APlayerCharacter::ForwardAxis(float axis)
 
 void APlayerCharacter::RightAxis(float axis)
 {	
+	if (bIsDead)
+		return;
+
 	InputDirection.X = axis;
 
 	FRotator rot = GetController()->GetControlRotation();
@@ -122,6 +129,9 @@ void APlayerCharacter::RightAxis(float axis)
 
 void APlayerCharacter::AttackPressed()
 {
+	if (bIsDead)
+		return;
+
 	switch (ActionMode)
 	{
 	case EActionMode::Interact:
@@ -168,24 +178,36 @@ void APlayerCharacter::FastMoveReleased()
 
 void APlayerCharacter::ActionMode1Pressed()
 {
+	if (bIsDead)
+		return;
+
 	ActionMode = EActionMode::Interact;
 	ActionModeChanged(EActionMode::Interact);
 }
 
 void APlayerCharacter::ActionMode2Pressed()
 {
+	if (bIsDead)
+		return;
+
 	ActionMode = EActionMode::StealthAttack;
 	ActionModeChanged(EActionMode::StealthAttack);
 }
 
 void APlayerCharacter::ActionMode3Pressed()
 {
+	if (bIsDead)
+		return;
+
 	ActionMode = EActionMode::LethalAttack;
 	ActionModeChanged(EActionMode::LethalAttack);
 }
 
 void APlayerCharacter::ActionModeTogglePressed()
 {
+	if (bIsDead)
+		return;
+
 	uint8 nextValue = (uint8)ActionMode + 1;
 	if (nextValue == (uint8)EActionMode::MAX)
 	{
@@ -197,6 +219,11 @@ void APlayerCharacter::ActionModeTogglePressed()
 	}
 
 	ActionModeChanged(ActionMode);
+}
+
+void APlayerCharacter::MaimMe(float dmg)
+{
+	TakeDamage(dmg, FDamageEvent(), GetController(), this);
 }
 
 FGenericTeamId APlayerCharacter::GetGenericTeamId() const

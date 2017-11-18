@@ -33,7 +33,7 @@ private:
 	void ActionMode3Pressed();
 	void ActionModeTogglePressed();	
 
-	void CameraUpdate();
+	void CameraUpdate(float deltaTime);
 	void UpdatePlayerRotation(float deltaTime);
 
 public:
@@ -50,6 +50,9 @@ public:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Camera")
 	class USpringArmComponent* CameraSpringArm;
+
+	UFUNCTION(Exec)
+	void MaimMe(float dmg);
 
 protected:
 
@@ -82,6 +85,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
 	float CameraNormalDistance = 1000;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
+	float CameraDeadDistance = 400;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
+	float CameraZoomSpeed = 10;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Camera")
 	bool bRotatingCamera;
