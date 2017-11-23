@@ -5,8 +5,6 @@
 #include "HeistCharacter.h"
 #include "HeistTeamInfo.h"
 
-#include "Perception/AIPerceptionComponent.h"
-
 AHeistCharacterAIController::AHeistCharacterAIController()
 {
 	PerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerception"));
@@ -15,6 +13,34 @@ AHeistCharacterAIController::AHeistCharacterAIController()
 void AHeistCharacterAIController::BeginPlay()
 {
 	Super::BeginPlay();
+	if (IsValid(PerceptionComponent))
+	{
+		//PerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &AHeistCharacterAIController::PerceptionUpdated);
+		PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AHeistCharacterAIController::ActorPerceptionUpdated);
+	}
+}
+
+void AHeistCharacterAIController::PerceptionUpdated(TArray<AActor*> updatedActors)
+{
+
+}
+
+void AHeistCharacterAIController::ActorPerceptionUpdated(AActor* actor, FAIStimulus stimulus)
+{
+	if (stimulus.WasSuccessfullySensed())
+	{
+		if (!SensedEnemies.Contains(actor))
+		{
+			SensedEnemies.Add(actor);
+		}		
+	}
+	else
+	{
+		if (SensedEnemies.Contains(actor))
+		{
+			SensedEnemies.Remove(actor);
+		}
+	}
 }
 
 void AHeistCharacterAIController::Notify_CharacterTakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController* EventInstigator, AActor* DamageCauser)
