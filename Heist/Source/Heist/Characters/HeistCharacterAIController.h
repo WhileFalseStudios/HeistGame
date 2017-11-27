@@ -22,6 +22,12 @@ public:
 	void Notify_CharacterTakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
 	void Notify_CharacterDeath(AActor* killer, float killingDamage, TSubclassOf<UDamageType> killingDamageType, const FVector& damageOrigin, const FVector& damageForce);
 
+	/**
+	For blueprint features
+	*/
+	UFUNCTION(BlueprintImplementableEvent, Category = "AI|Heist Character")
+	void PawnKilled();
+
 	UFUNCTION()
 	void PerceptionUpdated(TArray<AActor*> updatedActors);
 

@@ -51,6 +51,7 @@ void AHeistCharacterAIController::Notify_CharacterTakeDamage(float DamageAmount,
 void AHeistCharacterAIController::Notify_CharacterDeath(AActor* killer, float killingDamage, TSubclassOf<UDamageType> killingDamageType, const FVector& damageOrigin, const FVector& damageForce)
 {
 	UE_LOG(LogEnemy, Log, TEXT("Agh!"));
+	PawnKilled();
 }
 
 AHeistCharacter* AHeistCharacterAIController::GetHeistCharacter()
